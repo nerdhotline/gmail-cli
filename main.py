@@ -1,6 +1,42 @@
-import os.path
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+import json 
+import re
+import base64
+from rich.console import Console
+from rich.panel import Panel
+from rich.markdown import Markdown
+import html2text
 
+from Mail import Mail
+from Security import Security
+from datetime import datetime
+
+
+def main():
+  try:
+    # Authentication
+    gmail_api = Security(["https://www.googleapis.com/auth/gmail.readonly"])
+    creds = gmail_api.grabCredentials()
+    messages, service = gmail_api.collectMessages(creds)
+
+    # Read Messages
+    for message in messages:
+      msg = Mail(service, message)
+      # print(json.dumps(msg.message, indent=4))
+      print(json.dumps(msg.header, indent=4))
+      time = int(msg.header["internalDate"])
+      dtObj = datetime.fromtimestamp(time/1000)
+
+      # Format Email
+      print(dtObj.strftime("%d/%m/%Y"))
+      print(msg.body)
+      exit(9)
+
+    
+  except HttpError as error:
+    # TODO - Handle errors from gmail API.
+    print(f"An error occurred: {error}")
+
+
+if __name__ == "__main__":
+  main()
