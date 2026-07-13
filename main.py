@@ -23,13 +23,17 @@ def main():
     for message in messages:
       msg = Mail(service, message)
       # print(json.dumps(msg.message, indent=4))
-      print(json.dumps(msg.header, indent=4))
+      # print(json.dumps(msg.header, indent=4))
       time = int(msg.header["internalDate"])
       dtObj = datetime.fromtimestamp(time/1000)
+      date = dtObj.strftime("%d/%m/%Y")
 
-      # Format Email
-      print(dtObj.strftime("%d/%m/%Y"))
+      # format email
+      print(f"from: {msg.header["from"]}")
+      print(f"date: {date}")
+      print()
       print(msg.body)
+
       exit(9)
 
     
