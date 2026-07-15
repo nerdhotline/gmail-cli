@@ -1,3 +1,5 @@
+import json
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -33,21 +35,34 @@ class Security:
     return creds
 
   def collectMessages(self, creds):
-    # Call the Gmail API
-    service = build("gmail", "v1", credentials=creds)
-    results = (
-      service.users().messages().list(
-        userId="me", 
-        q="category:primary",
-        labelIds=["INBOX"]
-      ).execute()
-    )
+    queryCollection, query = [], None
+    apiService, messages, nextPageToken = None, [], ''
+    
+    # build api service, collect all email id's 
+    apiService = build("gmail", "v1", credentials=creds)  
+    while (nextPageToken != None):
+      query = (
+        apiService.users().messages().list(
+          userId="me", 
+          labelIds=["INBOX"],
+          pageToken=nextPageToken
+        ).execute()  
+      ) if (nextPageToken != '') else (
+        # Parameter settings for initial query
+        apiService.users().messages().list(
+          userId="me", 
+          labelIds=["INBOX"],
+        ).execute()
+      )
+      messages = query.get("messages", []) #
+      nextPageToken = query.get("nextPageToken", None)
+      queryCollection += messages
 
-    messages = results.get("messages", [])
-
-    # TODO: test no messages catch
-    # TODO: remedy forced exit 
-    if not messages:
+    if (len(queryCollection) == 0):
+      # TODO: test no messages catch
+      # TODO: remedy forced exit 
       print("No messages found.")
-      exit(29)  
-    return messages, service
+      print("force-exit[Security.py, 59-60]")
+      exit(60)  
+      
+    return queryCollection, apiService
