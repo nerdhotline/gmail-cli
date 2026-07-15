@@ -13,12 +13,14 @@ class Security:
     self.credsFilepath = "credentials.json"
   
   def grabCredentials(self):
+    #TODO: Add timeout feature for creds
     creds = None
-    
+
     if os.path.exists(self.tknFilepath):
       creds = Credentials.from_authorized_user_file(self.tknFilepath, self.SCOPES)
 
     if (not creds or not creds.valid):
+      print('tickticktick')
       if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
       else:
