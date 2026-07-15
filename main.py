@@ -7,19 +7,10 @@ def run():
     gmail_api = Security(["https://www.googleapis.com/auth/gmail.readonly"])
     creds = gmail_api.grabCredentials()
     messages, service = gmail_api.collectMessages(creds)
+    mailbox = Mailbox()
+    mailbox.setCollection(Mailbox.processMessages(messages, service))
 
-    # Read Messages
-    for message in messages:
-      msg = Mail(service, message)
-      msg.formatEmail()
-
-      while(True):
-        usrInput = input()
-        if(usrInput == 'a'):
-          break
-        elif(usrInput == 'q'):
-          exit(4)
-      continue
+    
     
   except HttpError as error:
     # TODO - Handle errors from gmail API.

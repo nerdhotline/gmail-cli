@@ -10,5 +10,6 @@ import tkinter as tk
 from tkinterweb import HtmlFrame # import the HtmlFrame widget
 
 from Mail import Mail
+from Mailbox import Mailbox
 from Security import Security
 from datetime import datetime
