@@ -6,9 +6,15 @@ def run():
     # Authentication
     gmail_api = Security(["https://www.googleapis.com/auth/gmail.readonly"])
     creds = gmail_api.grabCredentials()
-    messages, service = gmail_api.collectMessages(creds)
-    mailbox = Mailbox()
-    mailbox.setCollection(Mailbox.processMessages(messages, service))
+  
+    idObjects, service = gmail_api.collectEmailIds(creds)
+
+    mailbox = Mailbox(service)
+    mailbox.setIdLst(idObjects)
+    mailbox.sortIdLst()
+    print('force-exit[main.py|15-16]')
+    exit(8)
+    mailbox.setCollection(Mailbox.processMessages(idObjects, service))
 
     
     

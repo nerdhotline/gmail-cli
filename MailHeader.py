@@ -19,4 +19,11 @@ GmailHeader = TypedDict('GmailHeader', {
   }
 )
 
+emailIdTime = TypedDict('emailIdTime', {
+    "id": str,
+    "threadId": str,
+    "internalDate": str,
+  }
+)
+
   

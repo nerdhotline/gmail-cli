@@ -34,7 +34,7 @@ class Security:
 
     return creds
 
-  def collectMessages(self, creds):
+  def collectEmailIds(self, creds):
     queryCollection, query = [], None
     apiService, messages, nextPageToken = None, [], ''
     
