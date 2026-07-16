@@ -9,7 +9,7 @@ def run():
   
     idObjects, service = gmail_api.collectEmailIds(creds)
 
-    mailbox = Mailbox(service)
+    mailbox = Mailbox(service, creds)
     mailbox.setIdLst(idObjects)
     mailbox.sortIdLst()
     print('force-exit[main.py|15-16]')
