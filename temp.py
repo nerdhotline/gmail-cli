@@ -1,6 +1,6 @@
 from textual.app import App, ComposeResult, Widget, RenderResult
 from textual.widgets import Footer, Header, Static
-from mainImports import *
+from backend.mainImports import *
 
 class Hello(Widget):
     def render(self, test) -> RenderResult:

@@ -9,7 +9,7 @@ import html2text
 import tkinter as tk
 from tkinterweb import HtmlFrame # import the HtmlFrame widget
 
-from Mail import Mail
-from Mailbox import Mailbox
-from Security import Security
+from backend.Mail import Mail
+from backend.Mailbox import Mailbox
+from backend.ApiService import ApiService
 from datetime import datetime

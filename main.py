@@ -1,20 +1,18 @@
-from mainImports import *
+from backend.mainImports import *
 
 
 def run():
   try:
     # Authentication
-    gmail_api = Security(["https://www.googleapis.com/auth/gmail.readonly"])
-    creds = gmail_api.grabCredentials()
-  
-    idObjects, service = gmail_api.collectEmailIds(creds)
+    gmailApi = ApiService(["https://www.googleapis.com/auth/gmail.readonly"])
+    gmailApi.refreshCreds()
 
-    mailbox = Mailbox(service, creds)
-    mailbox.setIdLst(idObjects)
-    mailbox.sortIdLst()
-    print('force-exit[main.py|15-16]')
-    exit(8)
-    mailbox.setCollection(Mailbox.processMessages(idObjects, service))
+    # collect email ID's via messages.list()
+    emailIDs = gmailApi.collectIdBatch()
+
+
+
+  
 
     
     

@@ -1,7 +1,7 @@
 import base64
 from datetime import datetime
 import json 
-from MailHeader import GmailHeader
+from backend.MailHeader import GmailHeader
 import tkinter as tk
 from tkinterweb import HtmlFrame # import the HtmlFrame widget
 
