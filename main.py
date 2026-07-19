@@ -9,6 +9,7 @@ def run():
 
     # collect email ID's via messages.list()
     emailIDs = gmailApi.collectIdBatch()
+    
 
 
 
