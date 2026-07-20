@@ -4,6 +4,7 @@ import json
 from backend.MailHeader import GmailHeader
 import tkinter as tk
 from tkinterweb import HtmlFrame # import the HtmlFrame widget
+import re
 
 class Mail:
   def __init__(self, service, message):
@@ -75,6 +76,10 @@ class Mail:
     for itm in header:
       if itm["name"] in wantedValues:
         result[itm["name"].lower()] = itm["value"]
+
+    # clean up "from" response [ex; someone <someone@email.com>]
+    match = re.search(r"(.*?) <.*?>", result["from"])
+    result["from"] = match.group(1) if match != None else result["from"]
 
     time = int(result["internalDate"])
     dtObj = datetime.fromtimestamp(time/1000)

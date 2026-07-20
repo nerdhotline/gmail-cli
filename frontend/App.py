@@ -1,11 +1,5 @@
-from textual.app import App
+from rich.console import Console
+from rich.table import Table
 
 
-class MyApp(App):
-  
-  pass
 
-
-if __name__ == "__main__":
-  app = MyApp()
-  app.run()
