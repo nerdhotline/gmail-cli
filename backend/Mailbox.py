@@ -9,17 +9,15 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 class Mailbox:
-  def __init__(self, apiService, creds):
+  def __init__(self):
     self.collection:list[Mail] = []
-    self.idLst = []
-    self.apiService = apiService
-    self.creds = creds
-    
+    self.idLst = {}
+
   def setCollection(self, value):
     self.collection = value
   
-  def setIdLst(self, value):
-    self.idLst = value
+  def setIdLst(self, key, value):
+    self.idLst[key] = value
   
   
 

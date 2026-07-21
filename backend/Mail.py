@@ -17,6 +17,15 @@ class Mail:
     self.header = self.processHeader()
     self.body = self.processBody()
 
+  def formatEmail(self):
+    return f'''
+    From: {self.header["from"]}
+    Date: {self.header["formattedDate"]}
+    Subject: {self.header["subject"]}
+
+    {self.body}
+    '''
+
   def getMessage(self):
     return self.message
   
