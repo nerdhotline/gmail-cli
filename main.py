@@ -1,7 +1,8 @@
 from backend.mainImports import *
-from textual.screen import Screen
+from textual.screen import ModalScreen
 from textual.app import App, ComposeResult
 from textual.widgets import DataTable, Footer, Static
+from textual.containers import Grid
 
 # Authentication
 gmailApi = ApiService(["https://www.googleapis.com/auth/gmail.readonly"])
@@ -11,11 +12,12 @@ emailIDs = gmailApi.collectIdBatch()
 mailbox = Mailbox()
 
 
-class EmailScreen(Screen):
+class EmailScreen(ModalScreen):
   # CONTEXT ------------------------------------------------------------------------------------------------------------------------------------
   BINDINGS = [
     ("escape", "app.pop_screen", "Pop screen")
   ]
+  CSS_PATH = "main.tcss"
 
   # --------------------------------------------------------------------------------------------------------------------------------------------
   def __init__(self, header:dict, id:str):
@@ -23,8 +25,11 @@ class EmailScreen(Screen):
     super().__init__(id=id)
 
   def compose(self) -> ComposeResult:
-    yield Static(f"{json.dumps(self.header, indent=4)}", id="BSOD_body")
     yield Footer()
+    yield Grid(        
+      Static(f"{json.dumps(self.header, indent=4)}", id="bsod_body"), id="bsod_grid"
+              
+    )
 
 
 
@@ -34,6 +39,7 @@ class TableApp(App):
     "email_screen": EmailScreen
   }
 
+  CSS_PATH = "main.tcss"
   BINDINGS = [
     ("d", "toggle_dark", "Toggle dark mode"), 
     ("q", "quit_app", "Terminate application"),
