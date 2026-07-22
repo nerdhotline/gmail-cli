@@ -3,7 +3,7 @@ EmailScreen {
     content-align: center middle;
 }
 
-#bsod_grid {
+#bsod_grid { 
     border: solid red;
     width: 50%;
     height: 50%;
