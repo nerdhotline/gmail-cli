@@ -35,10 +35,12 @@ class Mail:
   # CLASS METHODS ------------------------------------------------------------------------------------------
 
   def formatEmail(self):
+    result = ''
+
     # Header
-    print(f"from: {self.header["from"]}")
-    print(f"date: {self.header["formattedDate"]}")
-    print(f"mimeType: {self.header["mimeType"]}")
+    result += f"from: {self.header["from"]}\n"
+    result += f"date: {self.header["formattedDate"]}\n"
+    result += f"mimeType: {self.header["mimeType"]}\n"
 
     # Body
     if (self.header["mimeType"] == "multipart/alternative"):
@@ -54,8 +56,9 @@ class Mail:
       frame.pack(fill="both", expand=True)
       root.mainloop()
     else:
-      print(self.body)  
-    print()
+      result += f"\n{self.body}"  
+    
+    return result
     
 
 
