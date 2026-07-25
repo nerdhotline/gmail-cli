@@ -1,7 +1,7 @@
 from backend.mainImports import *
 from textual.screen import ModalScreen
 from textual.app import App, ComposeResult
-from textual.widgets import DataTable, Footer, Static
+from textual.widgets import DataTable, Footer, Static, Label
 from textual.containers import Grid
 
 # Authentication
@@ -27,8 +27,7 @@ class EmailScreen(ModalScreen):
   def compose(self) -> ComposeResult:
     yield Footer()
     yield Grid(        
-      Static(f"{json.dumps(self.header, indent=4)}", id="bsod_body"), id="bsod_grid"
-              
+      Label(f"{json.dumps(self.header, indent=4)}", id="bsod_body"), id="bsod_grid"       
     )
 
 
@@ -41,7 +40,7 @@ class TableApp(App):
   CSS_PATH = "main.tcss"
   BINDINGS = [
     ("d", "toggle_dark", "Toggle dark mode"), 
-    ("q", "quit_app", "Terminate application"),
+    ("q", "quit_app()", "Terminate application"),
     ("b", "push_screen('email_screen')", "Switch")
   ]
 
@@ -50,7 +49,7 @@ class TableApp(App):
     yield DataTable(cursor_type='row')
     yield Footer()
 
-  def on_mount(self) -> None:
+  def on_mount(self) -> None: 
     table = self.query_one(DataTable)
     table.add_columns('from', 'subject')
     for i in range(0, 50):
@@ -62,6 +61,9 @@ class TableApp(App):
       subject = email.header["subject"]
 
       table.add_row(frm, subject, key=itm["id"])
+  
+  def action_quit_app(self) -> None:
+    self.exit()
   
   # EVENTS -------------------------------------------------------------------------------------------------------------------------------------
   def action_toggle_dark(self) -> None:
