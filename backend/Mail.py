@@ -15,7 +15,9 @@ class Mail:
       format="full"
     ).execute()
     self.header = self.processHeader()
+    self.html = None
     self.body = self.processBody()
+    
 
   def formatEmail(self):
     return f'''
@@ -44,6 +46,16 @@ class Mail:
 
     # Body
     if (self.header["mimeType"] == "multipart/alternative"):
+      result += "[embedded html.]\n[see details]"
+    elif (self.header["mimeType"] == "multipart/mixed"):
+      result += "[embedded html.]\n[see details]"
+    else:
+      result += f"\n{self.body}"  
+    
+    return result
+  
+  def renderEmail(self):
+    if (self.header["mimeType"] == "multipart/alternative"):
       root = tk.Tk()
       frame = HtmlFrame(root, messages_enabled=False)
       frame.load_html(html_source=self.body)
@@ -55,11 +67,7 @@ class Mail:
       frame.load_html(html_source=self.body)
       frame.pack(fill="both", expand=True)
       root.mainloop()
-    else:
-      result += f"\n{self.body}"  
-    
-    return result
-    
+
 
 
 
@@ -110,7 +118,12 @@ class Mail:
       if (mimeType == "multipart/alternative"):
         for part in parts:
           if (part["mimeType"] == "text/html"):
-            data += part["body"]["data"]
+            data += part["body"]["data"]   
+        decodedBytes = base64.urlsafe_b64decode(data)
+        decodedText = decodedBytes.decode('utf-8').strip()
+        self.html = decodedText
+        return 'None'
+
       elif (mimeType == "multipart/mixed"):
         for part in parts:
           if (part["mimeType"] == "multipart/related"):
@@ -118,15 +131,18 @@ class Mail:
             for sec in section:
               if(sec["mimeType"] == "text/html"):
                 data += sec["body"]["data"]
+        decodedBytes = base64.urlsafe_b64decode(data)
+        decodedText = decodedBytes.decode('utf-8').strip()
+        self.html = decodedText
+        return 'None'
 
       else:
         for part in parts:
           data += part["body"]["data"]
 
-      decodedBytes = base64.urlsafe_b64decode(data)
-      decodedText = decodedBytes.decode('utf-8').strip()
-
-      return decodedText
+        decodedBytes = base64.urlsafe_b64decode(data)
+        decodedText = decodedBytes.decode('utf-8').strip()
+        return decodedText
     except KeyError:
       return "FAIL"
     

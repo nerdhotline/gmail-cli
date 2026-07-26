@@ -41,7 +41,8 @@ class TableApp(App):
   BINDINGS = [
     ("d", "toggle_dark", "Toggle dark mode"), 
     ("q", "quit_app()", "Terminate application"),
-    ("b", "push_screen('email_screen')", "Switch")
+    ("b", "push_screen('email_screen')", "Switch"),
+    ("enter", "selected_email()", "Select")
   ]
 
   # --------------------------------------------------------------------------------------------------------------------------------------------
@@ -64,6 +65,16 @@ class TableApp(App):
   
   def action_quit_app(self) -> None:
     self.exit()
+  
+  def action_selected_email(self) -> None:
+    if self.cursor_row is not None and self.cursor_row >= 0:
+      # Grab the row key corresponding to the current cursor position
+      row_key, _ = self.coordinate_to_cell_key(self.cursor_coordinate)
+      
+      # Post the RowSelected message manually
+      self.post_message(
+        self.RowSelected(self, self.cursor_row, row_key)
+      )
   
   # EVENTS -------------------------------------------------------------------------------------------------------------------------------------
   def action_toggle_dark(self) -> None:
