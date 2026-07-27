@@ -20,14 +20,17 @@ class EmailScreen(ModalScreen):
   CSS_PATH = "main.tcss"
 
   # --------------------------------------------------------------------------------------------------------------------------------------------
-  def __init__(self, header:dict, id:str):
-    self.header = header
+  def __init__(self, body:dict, id:str):
+    self.body = body
     super().__init__(id=id)
 
   def compose(self) -> ComposeResult:
     yield Footer()
-    yield Grid(        
-      Label(f"{json.dumps(self.header, indent=4)}", id="bsod_body"), id="bsod_grid"       
+    yield Grid(  
+      Static(f"subject", id="emailBox-subject"),
+      Static(f"metadata", id="emailBox-metadata"),
+      Static(f"{self.body}", id="emailBox-body"),
+      id="emailBox"   
     )
 
 

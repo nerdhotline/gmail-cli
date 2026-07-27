@@ -1,16 +1,40 @@
 EmailScreen {
     align: center middle;
-    content-align: center middle;
 }
 
-#bsod_grid { 
+
+#emailBox {
+    width: 70%;
+    height: 70%;
+    
+
+    align: center middle;
+    layout: grid;
+    grid-size: 8 8;
+    grid-columns: 1fr;
+    grid-gutter: 0 1;
+}
+
+#emailBox-subject {
+    height: 1fr;
     border: solid red;
-    width: 50%;
-    height: 50%;
+    column-span: 8;
+    row-span: 1;
+
 }
 
-#bsod_body {
-    align: left top;
+#emailBox-metadata {
+    height: 100%;
+    border: solid red;
+    column-span: 4;
+    row-span: 7;
+}
+
+#emailBox-body { 
+    height: 100%;
+    border: solid red;
+    column-span: 4;
+    row-span: 7;
 }
 
 
