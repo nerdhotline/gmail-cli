@@ -17,7 +17,7 @@ EmailScreen {
 
 #emailBox-subject {
     height: 1fr;
-    border: solid red;
+    border: solid white;
     column-span: 8;
     row-span: 1;
 
@@ -25,15 +25,15 @@ EmailScreen {
 
 #emailBox-metadata {
     height: 100%;
-    border: solid red;
-    column-span: 4;
+    border: solid white;
+    column-span: 2;
     row-span: 7;
 }
 
 #emailBox-body { 
     height: 100%;
-    border: solid red;
-    column-span: 4;
+    border: solid white;
+    column-span: 6;
     row-span: 7;
 }
 

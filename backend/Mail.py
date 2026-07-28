@@ -36,7 +36,7 @@ class Mail:
 
   # CLASS METHODS ------------------------------------------------------------------------------------------
 
-  def formatEmail(self):
+  def formatHeader(self):
     result = ''
 
     # Header
@@ -44,11 +44,17 @@ class Mail:
     result += f"date: {self.header["formattedDate"]}\n"
     result += f"mimeType: {self.header["mimeType"]}\n"
 
+    return result
+
+  def formatBody(self):
+    result = ''
+
     # Body
     if (self.header["mimeType"] == "multipart/alternative"):
-      result += "[embedded html.]\n[see details]"
-    elif (self.header["mimeType"] == "multipart/mixed"):
-      result += "[embedded html.]\n[see details]"
+      # result += "[embedded html.]\n[see details]"
+      result += f"\n{self.body}"
+    # elif (self.header["mimeType"] == "multipart/mixed"):
+    #   result += "[embedded html.]\n[see details]"
     else:
       result += f"\n{self.body}"  
     
@@ -116,25 +122,41 @@ class Mail:
 
       data = ""
       if (mimeType == "multipart/alternative"):
+        temp = ''
         for part in parts:
           if (part["mimeType"] == "text/html"):
-            data += part["body"]["data"]   
+            data += part["body"]["data"]
+          if (part["mimeType"] == "text/plain"):
+            temp += part["body"]["data"]
+
         decodedBytes = base64.urlsafe_b64decode(data)
         decodedText = decodedBytes.decode('utf-8').strip()
         self.html = decodedText
-        return 'None'
+
+        decodedBytes = base64.urlsafe_b64decode(temp)
+        decodedText = decodedBytes.decode('utf-8').strip()
+        self.body = decodedText
+
+        return decodedText
 
       elif (mimeType == "multipart/mixed"):
+        temp = ''
         for part in parts:
           if (part["mimeType"] == "multipart/related"):
             section = part["parts"]
             for sec in section:
               if(sec["mimeType"] == "text/html"):
                 data += sec["body"]["data"]
+              if (part["mimeType"] == "text/plain"):
+                temp += part["body"]["data"]
         decodedBytes = base64.urlsafe_b64decode(data)
         decodedText = decodedBytes.decode('utf-8').strip()
         self.html = decodedText
-        return 'None'
+
+        decodedBytes = base64.urlsafe_b64decode(temp)
+        decodedText = decodedBytes.decode('utf-8').strip()
+        self.body = decodedText
+        return decodedText
 
       else:
         for part in parts:

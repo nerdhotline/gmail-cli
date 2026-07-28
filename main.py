@@ -20,16 +20,16 @@ class EmailScreen(ModalScreen):
   CSS_PATH = "main.tcss"
 
   # --------------------------------------------------------------------------------------------------------------------------------------------
-  def __init__(self, body:dict, id:str):
-    self.body = body
+  def __init__(self, email:Mail, id:str):
+    self.email = email
     super().__init__(id=id)
 
   def compose(self) -> ComposeResult:
     yield Footer()
     yield Grid(  
-      Static(f"subject", id="emailBox-subject"),
-      Static(f"metadata", id="emailBox-metadata"),
-      Static(f"{self.body}", id="emailBox-body"),
+      Static(f"{self.email.header['subject']}", id="emailBox-subject"),
+      Static(f"{self.email.formatHeader()}", id="emailBox-metadata"),
+      Static(f"{self.email.formatBody()}", id="emailBox-body"),
       id="emailBox"   
     )
 
@@ -86,7 +86,7 @@ class TableApp(App):
   
   def on_data_table_row_selected(self, event:DataTable.RowSelected):
     selectedEmail:Mail = mailbox.idLst[event.row_key]
-    self.push_screen(EmailScreen(selectedEmail.formatEmail(), id="MyScreen"))
+    self.push_screen(EmailScreen(selectedEmail, id="MyScreen"))
 
 app = TableApp()
 app.run()
